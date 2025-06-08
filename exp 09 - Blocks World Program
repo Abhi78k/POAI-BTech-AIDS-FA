@@ -1,0 +1,35 @@
+#Blocks World Program
+class BlocksWorld:
+    def __init__(self, num_blocks):
+        self.state = [[i] for i in range(num_blocks)]
+
+    def display_state(self):
+        for stack in self.state:
+            print("Stack:", stack)
+
+    def find_stack(self, block):
+        for stack in self.state:
+            if block in stack:
+                return stack
+        return None
+
+    def move(self, block, dest_block):
+        src = self.find_stack(block)
+        dest = self.find_stack(dest_block)
+        if src and dest and block in src:
+            src.remove(block)
+            dest.append(block)
+            self.display_state()
+
+def main():
+    world = BlocksWorld(3)
+    print("Initial State:")
+    world.display_state()
+
+    print("\nMoving Block 0 onto 2:")
+    world.move(0, 2)
+
+    print("\nMoving Block 1 onto 2:")
+    world.move(1, 2)
+
+main()
