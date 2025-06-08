@@ -1,0 +1,25 @@
+#Fuzzy Inference System 
+import numpy as np
+import skfuzzy as fuzz
+import matplotlib.pyplot as plt
+
+temperature = np.arange(0, 41, 1)
+fan_speed = np.arange(0, 11, 1)
+
+temp_low = fuzz.trimf(temperature, [0, 0, 20])
+temp_medium = fuzz.trimf(temperature, [10, 20, 30])
+temp_high = fuzz.trimf(temperature, [20, 30, 40])
+
+fan_low = fuzz.trimf(fan_speed, [0, 0, 5])
+fan_medium = fuzz.trimf(fan_speed, [2, 5, 8])
+fan_high = fuzz.trimf(fan_speed, [5, 10, 10])
+
+temperature_input = 28
+low = fuzz.interp_membership(temperature, temp_low, temperature_input)
+med = fuzz.interp_membership(temperature, temp_medium, temperature_input)
+high = fuzz.interp_membership(temperature, temp_high, temperature_input)
+
+activation = fan_low * low + fan_medium * med + fan_high * high
+fan_output = fuzz.defuzz(fan_speed, activation, 'centroid')
+
+print(f"Temperature: {temperature_input}°C => Fan Speed: {fan_output:.2f}")
