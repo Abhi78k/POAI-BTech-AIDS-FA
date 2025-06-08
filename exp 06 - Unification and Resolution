@@ -1,0 +1,39 @@
+#Unification and resolution
+def unify(x, y, subst):
+    if subst is None:
+        return None
+    elif x == y:
+        return subst
+    elif isinstance(x, str) and x.islower():
+        return unify_var(x, y, subst)
+    elif isinstance(y, str) and y.islower():
+        return unify_var(y, x, subst)
+    elif isinstance(x, list) and isinstance(y, list) and len(x) == len(y):
+        return unify(x[1:], y[1:], unify(x[0], y[0], subst))
+    else:
+        return None
+
+def unify_var(var, val, subst):
+    if var in subst:
+        return unify(subst[var], val, subst)
+    elif val in subst:
+        return unify(var, subst[val], subst)
+    elif occurs_check(var, val, subst):
+        return None
+    else:
+        subst[var] = val
+        return subst
+
+def occurs_check(var, val, subst):
+    if var == val:
+        return True
+    elif isinstance(val, list):
+        return any(occurs_check(var, x, subst) for x in val)
+    elif val in subst:
+        return occurs_check(var, subst[val], subst)
+    return False
+
+# Test
+subst = {}
+result = unify(['knows', 'john', 'x'], ['knows', 'john', 'mary'], subst)
+print("Unification Result:", result)
