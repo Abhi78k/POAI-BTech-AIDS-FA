@@ -1,0 +1,21 @@
+% File: decision.pl
+
+% Minimum and Maximum Rules
+minimum(X, Y, X) :- X =< Y.
+minimum(X, Y, Y) :- X > Y.
+
+maximum(X, Y, X) :- X >= Y.
+maximum(X, Y, Y) :- X < Y.
+
+% Facts and Rules
+likes(mary, food).
+likes(mary, wine).
+likes(john, wine).
+likes(john, mary).
+
+likes(john, X) :- likes(mary, X).          % John likes anything Mary likes
+likes(john, Y) :- likes(Y, wine).          % John likes anyone who likes wine
+likes(john, Y) :- likes(Y, Y).             % John likes anyone who likes themselves
+?- minimum(5, 10, Min).
+?- likes(john, food).
+?- likes(john, Y).
